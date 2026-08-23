@@ -25,21 +25,15 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Recreate Android directory
+      - name: Create Flutter project structure
         run: |
           rm -rf android
-          flutter create . --platforms=android --org=com.example
+          flutter create . --platforms=android --org=com.tracker.client
 
-      - name: Fix Android Compile SDK Version
-        run: |
-          echo "android.defaults.buildfeatures.buildconfig=true" >> android/gradle.properties
-          sed -i 's/compileSdkVersion.*/compileSdkVersion 34/' android/app/build.gradle
-          sed -i 's/targetSdkVersion.*/targetSdkVersion 34/' android/app/build.gradle
+      - name: Fetch dependencies
+        run: flutter pub get
 
-      - name: Build APK
+      - name: Build APK Debug
         run: flutter build apk --debug
 
       - name: Upload APK
